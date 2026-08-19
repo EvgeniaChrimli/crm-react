@@ -1,75 +1,71 @@
-# React + TypeScript + Vite
+# CRM React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Фронтенд CRM-системы на React с ролевым разграничением доступа (admin/user), JWT-аутентификацией с автоматическим обновлением токена и RTK Query для работы с API.
 
-Currently, two official plugins are available:
+## Стек
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **[React 19](https://react.dev/)** + **[TypeScript](https://www.typescriptlang.org/)** — UI и типизация
+- **[Vite](https://vite.dev/)** — сборка и dev-сервер
+- **[Redux Toolkit](https://redux-toolkit.js.org/)** + **[RTK Query](https://redux-toolkit.js.org/rtk-query/overview)** — состояние приложения и работа с API
+- **[React Router](https://reactrouter.com/)** (v7) — маршрутизация, включая защищённые роуты
+- **[Axios](https://axios-http.com/)** — HTTP-клиент с interceptor'ами для refresh-токена
+- **[ESLint](https://eslint.org/)** (+ `eslint-plugin-boundaries`) — контроль архитектурных границ между слоями
 
-## React Compiler
+## Архитектура
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Проект организован по принципам **Feature-Sliced Design**:
 
 ```
+src/
+├── app/            # инициализация приложения: роутер, store, layouts
+│   ├── layouts/     # AdminLayout, UserLayout
+│   ├── router/      # RequireRole, RootRedirect
+│   └── store/       # Redux store, типизированные хуки
+├── entities/       # бизнес-сущности
+│   ├── session/     # логика сессии (login/logout)
+│   └── user/        # модель пользователя, селекторы, API
+├── pages/          # страницы (login, logout, 404)
+└── shared/         # переиспользуемый код без бизнес-логики
+    ├── api/         # axios-инстанс, базовый query для RTK Query
+    └── config/      # константы (роуты и т.п.)
+```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Импорты между слоями выполняются через абсолютные пути с префиксом `src/*` (настроено в [tsconfig.app.json](tsconfig.app.json)).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Аутентификация и роли
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- После логина access-токен хранится в памяти ([`api-instance.ts`](src/shared/api/api-instance.ts)), при получении `401` axios автоматически дёргает `/auth/refresh` и повторяет запрос.
+- Пользователь имеет роль `admin` или `user` ([`user-types.ts`](src/entities/user/model/user-types.ts)).
+- `RequireRole` перенаправляет неавторизованных на `/login`, а пользователей с неподходящей ролью — на корень.
+- `RootRedirect` направляет авторизованного пользователя в `/admin` или `/app` в зависимости от роли.
+
+## Быстрый старт
+
+```bash
+npm install
+```
+
+Создайте `.env` в корне проекта (см. [.env](.env) как пример):
 
 ```
+VITE_API_URL=http://localhost:5000
+```
+
+Запуск dev-сервера:
+
+```bash
+npm run dev
+```
+
+## Скрипты
+
+| Команда           | Назначение                              |
+| ----------------- | ---------------------------------------- |
+| `npm run dev`     | запуск дев-сервера Vite с HMR            |
+| `npm run build`   | проверка типов (`tsc -b`) и продакшн-сборка |
+| `npm run preview` | локальный просмотр production-сборки     |
+| `npm run lint`    | проверка кода ESLint                     |
+
+## Статус проекта
+
+Проект находится на ранней стадии: реализованы аутентификация, ролевая маршрутизация и базовый layout для admin/user. Основной функционал CRM (сущности, экраны, формы) ещё предстоит добавить.
