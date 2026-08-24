@@ -1,0 +1,108 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-main: "Raleway", sans-serif;
+
+  --background-gradient: linear-gradient(90deg, #ceddd6, #b9babf, #f1bfa4);
+
+  --color-dark: #333232;
+  --color-light: #ffffff;
+
+  --radius-card: 20px;
+}
+
+.page-background {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--background-gradient);
+}
+
+.page-background__content {
+  position: relative;
+  z-index: 1;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.blob-1 {
+  top: -180px;
+  left: -160px;
+  width: 680px;
+  height: 680px;
+  background: radial-gradient(
+    circle at 35% 35%,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.9) 30%,
+    rgba(255, 255, 255, 0) 68%
+  );
+}
+
+.blob-2 {
+  top: 60px;
+  right: -220px;
+  width: 760px;
+  height: 760px;
+  background: radial-gradient(
+    circle at 55% 40%,
+    rgba(237, 150, 104, 0.95) 0%,
+    rgba(237, 150, 104, 0.75) 32%,
+    rgba(237, 150, 104, 0) 68%
+  );
+}
+
+.blob-3 {
+  bottom: -260px;
+  left: 26%;
+  width: 720px;
+  height: 720px;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(135, 138, 148, 0.95) 0%,
+    rgba(135, 138, 148, 0.7) 32%,
+    rgba(135, 138, 148, 0) 68%
+  );
+}
+
+.blob-4 {
+  top: 38%;
+  left: -40px;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.8) 30%,
+    rgba(255, 255, 255, 0) 70%
+  );
+}
+
+.blob-5 {
+  bottom: 120px;
+  right: 280px;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(
+    circle,
+    rgba(158, 187, 171, 1) 0%,
+    rgba(158, 187, 171, 0.75) 30%,
+    rgba(158, 187, 171, 0) 70%
+  );
+}
+
+.blob-6 {
+  top: 8%;
+  left: 38%;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+}
