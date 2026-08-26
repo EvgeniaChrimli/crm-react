@@ -8,6 +8,7 @@ import { ROUTES } from "src/shared/config/routes";
 import { loginSchema, type LoginFormData } from "../model/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosBaseQueryError } from "src/shared/types";
+import "./login-form.css";
 
 type LoginError = {
   message: string;
@@ -42,28 +43,50 @@ const LoginForm = () => {
     }
   };
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>
-          email
-          <input type="email" {...register("email")} />
-          {errors.email && <span>{errors.email.message}</span>}
-        </label>
-        <label>
-          pass
-          <input type="password" {...register("password")} />
-          {errors.password && <span>{errors.password.message}</span>}
-        </label>
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "loading" : "send"}
-        </button>
-      </form>
-      {errors.root && (
-        <div>
-          <span>{errors.root.type}</span>
-          <span>{errors.root.message}</span>
+    <div className="background-card">
+      <form
+        className="flex flex-col gap-3 justify-center p-8"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+      >
+        <p className="login-form__title">Войдите, чтобы продолжить</p>
+        <div className="login-form__field">
+          <label className="login-form__label" htmlFor="email">
+            Email
+          </label>
+          <input
+            id="email"
+            type="email"
+            className="login-form__input"
+            placeholder="example@mail.com"
+            aria-invalid={!!errors.email}
+            {...register("email")}
+          />
+          <span className="login-form__error">{errors.email?.message}</span>
         </div>
-      )}
+        <div className="login-form__field">
+          <label className="login-form__label" htmlFor="password">
+            Password
+          </label>
+          <input
+            id="password"
+            type="password"
+            className="login-form__input"
+            placeholder="••••••••"
+            aria-invalid={!!errors.password}
+            {...register("password")}
+          />
+          <span className="login-form__error">{errors.password?.message}</span>
+        </div>
+        <button
+          className="login-form__submit"
+          type="submit"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "загрузка..." : "Отправить"}
+        </button>
+        <span className="login-form__server-error">{errors.root?.message}</span>
+      </form>
     </div>
   );
 };
