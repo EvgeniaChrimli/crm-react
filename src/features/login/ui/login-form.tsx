@@ -17,7 +17,6 @@ const inputClasses =
   "w-full mt-[5px] p-2 rounded-card border border-transparent bg-light text-dark text-sm shadow-soft transition-[border-color,box-shadow] duration-200 ease-in-out placeholder:text-dark/50 focus:outline-none focus:border-dark focus:ring-3 focus:ring-dark/12 aria-invalid:border-error aria-invalid:ring-3 aria-invalid:ring-error/12";
 
 const errorClasses = "block min-h-4 text-xs leading-4 text-error";
-
 const LoginForm = () => {
   const [login] = useLoginMutation();
   const navigate = useNavigate();
@@ -31,6 +30,7 @@ const LoginForm = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
+  const testHusky = undefinedVariable;
 
   const onSubmit = async (data: LoginFormData) => {
     try {
