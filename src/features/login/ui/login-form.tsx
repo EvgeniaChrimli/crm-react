@@ -30,7 +30,6 @@ const LoginForm = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
-  const testHusky = undefinedVariable;
 
   const onSubmit = async (data: LoginFormData) => {
     try {
