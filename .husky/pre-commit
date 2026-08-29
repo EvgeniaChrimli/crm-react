@@ -1,0 +1,7 @@
+npx lint-staged
+
+if git diff --cached --name-only | grep -q '^\.claude/skills/project-rules/rules/'; then
+ node .claude/skills/project-rules/src/validate.js || exit 1
+  node .claude/skills/project-rules/src/build.js || exit 1
+  git add .claude/skills/project-rules/AGENTS.md
+fi  
