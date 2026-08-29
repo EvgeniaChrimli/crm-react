@@ -55,7 +55,7 @@ export default [
         { prefer: "type-imports" },
       ],
       "@typescript-eslint/no-unused-vars": [
-        "warn",
+        "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
       "@typescript-eslint/switch-exhaustiveness-check": "error",
